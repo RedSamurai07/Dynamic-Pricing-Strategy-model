@@ -66,6 +66,9 @@ warnings.filterwarnings('ignore')
 ```python
 import plotly.express as px
 import plotly.graph_objects as go
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 
 ```
 Loading the dataset
@@ -183,9 +186,6 @@ profitable_rides = df[df['profit_percentage'] > 0]
 # Identify loss rides where profit percentage is negative
 loss_rides = df[df['profit_percentage'] < 0]
 
-
-import plotly.graph_objects as go
-
 # Calculate the count of profitable and loss rides
 profitable_count = len(profitable_rides)
 loss_count = len(loss_rides)
@@ -217,8 +217,6 @@ fig.show()
 Now, as we have implemented a dynamic pricing strategy, let’s train a Machine Learning model. Before training the model, let’s preprocess the data
 
 ```python
-from sklearn.preprocessing import StandardScaler
-
 def data_preprocessing_pipeline(data):
     #Identify numeric and categorical features
     numeric_features = data.select_dtypes(include=['float', 'int']).columns
@@ -250,7 +248,6 @@ df["Vehicle_Type"] = df["Vehicle_Type"].map({"Premium": 1,
 Now let’s split the data and train a Machine Learning model to predict the cost of a ride
 ``` python
 #splitting data
-from sklearn.model_selection import train_test_split
 x = np.array(df[["Number_of_Riders", "Number_of_Drivers", "Vehicle_Type", "Expected_Ride_Duration"]])
 y = np.array(df[["adjusted_ride_cost"]])
 
@@ -264,7 +261,6 @@ y_train = y_train.ravel()
 y_test = y_test.ravel()
 
 # Training a random forest regression model
-from sklearn.ensemble import RandomForestRegressor
 model = RandomForestRegressor()
 model.fit(x_train, y_train)
 ```
@@ -301,8 +297,6 @@ print("Predicted price:", predicted_price)
 Here’s a comparison of the actual and predicted results
 
 ```python
-import plotly.graph_objects as go
-
 # Predict on the test set
 y_pred = model.predict(x_test)
 
